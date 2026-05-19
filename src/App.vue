@@ -1,11 +1,24 @@
 <script setup lang="ts">
+import LoadingSpinner from './components/LoadingSpinner.vue';
+import NavBar from './components/NavBar.vue';
 
 </script>
 
+
 <template>
- <div>
-   
- </div>
+ <Suspense>
+   <template #default>
+     <div>
+       <NavBar />
+     </div>
+   </template>
+
+   <template #fallback>
+     <div>
+       <LoadingSpinner />
+     </div>
+   </template>
+ </Suspense>
 </template>
 
 <style>

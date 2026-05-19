@@ -1,5 +1,5 @@
 import api from "./axios"
-import { type Task, type Priority, type Status,type ApiResponse } from "../types/Task"
+import type { Task, Priority, Status, ApiResponse } from "../types/Task"
 
 export type FetchTasksParams = {
   page?: number;
@@ -46,9 +46,7 @@ export const fetchTasks = async ({
   const response = await api.get<ApiResponse<Task[]>>("/tasks", { params });
   const res = response.data;
 
-  const tasks: Task[] = res.data || [];
-  const total = res.meta?.total || 0;
-  const currentPage = res.meta?.page || page;
+  const tasks = res.data || [];
   
   const filteredTasks = search
     ? tasks.filter((task) => search.
@@ -60,8 +58,8 @@ export const fetchTasks = async ({
   
   return {
     tasks: filteredTasks,
-    total,
-    page: currentPage
+    total: res.meta?.total ?? 0,
+    page: res.meta?.page ?? page,
   };
 };
 
@@ -76,7 +74,9 @@ export type CreateTaskParams = {
   description: string;
   priority: Priority;
   status: Status;
-  completedAt?: boolean | null
+  completedAt?: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
 }
 
 export const addTask = async (

@@ -18,7 +18,7 @@ export interface Task {
   description: string
   priority: Priority
   status: Status
-  completedAt?: boolean
+  completedAt?: string | null
   createdAt: string | null
   updatedAt: string | null
 }

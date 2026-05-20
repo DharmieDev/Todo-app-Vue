@@ -1,5 +1,5 @@
 import { addTask, deleteTask, fetchTasks, updateTask, type CreateTaskParams, type FetchTasksParams, type UpdateTaskParams } from "@/api/tasksApi";
-import type { Task } from "@/types/Task";
+import type { Task } from "@/types/TaskTypes";
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 import { ref } from "vue";
@@ -7,7 +7,6 @@ import { ref } from "vue";
 export const useTaskStore = defineStore("task", () => {
   const tasks = ref<Task[]>([])
   const total = ref(0)
-
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -16,15 +15,22 @@ export const useTaskStore = defineStore("task", () => {
     limit: 10,
     search: "",
     status: "ALL",
-    sort: "ASC"
+    priority: "LOW",
+    sort: "ASC",
+    all: false
   })
   
   const searchInput = ref("")
+  
   const loadTasks = async () => {
     const token = localStorage.getItem("token")
-  
-    if (!token) return
+    if (!token) {
+      error.value = "No authentication token found"
+      return
+    }
     loading.value = true
+    error.value = null
+    
     try {
       const response = await fetchTasks(filter)
       tasks.value = response.tasks
@@ -48,17 +54,18 @@ export const useTaskStore = defineStore("task", () => {
   payload: CreateTaskParams
   ) => {
     const tempTask: Task = {
-      id: Date.now().toString(),
+      id: new Date().toString(),
       name: payload.name,
       description: payload.description,
       priority: payload.priority,
       status: payload.status,
-      completedAt: Date.now().toLocaleString(),
-      createdAt: Date.now().toLocaleString(),
-      updatedAt: Date.now().toLocaleString(),
+      completedAt: new Date().toLocaleString(),
+      createdAt: new Date().toLocaleString(),
+      updatedAt: new Date().toLocaleString(),
     }
     // optimistic update
     tasks.value.unshift(tempTask)
+    total.value++
 
     try {
       const saved = await addTask(payload)
@@ -72,6 +79,7 @@ export const useTaskStore = defineStore("task", () => {
       tasks.value = tasks.value.filter(
         t => t.id !== tempTask.id
       )
+      total.value--
     }
     await loadTasks()
   }
@@ -86,7 +94,9 @@ export const useTaskStore = defineStore("task", () => {
 
     try {
       await deleteTask(id)
-    } catch {
+      total.value--
+    } catch (err) {
+      if (err instanceof Error) error.value = err.message
       tasks.value = backup
     }
   }
@@ -104,7 +114,8 @@ export const useTaskStore = defineStore("task", () => {
 
     try {
       await updateTask({id, updates})
-    } catch {
+    } catch (err) {
+      if (err instanceof Error) error.value = err.message
       Object.assign(task, backup)
     }
   }

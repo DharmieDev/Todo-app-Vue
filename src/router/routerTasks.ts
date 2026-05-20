@@ -33,12 +33,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: App
-    },
-    {
-      path: '',
-      name: 'todo',
+      name: 'tasks',
       component: TodoPage
     },
     {

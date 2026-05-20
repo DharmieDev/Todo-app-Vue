@@ -1,14 +1,14 @@
 import api from "./axios"
-import type { Task, Priority, Status, ApiResponse } from "../types/Task"
+import type { Task, Priority, Status, ApiResponse } from "../types/TaskTypes"
 
 export type FetchTasksParams = {
-  page?: number;
-  limit?: number;
-  search?: string
+  page: number;
+  limit: number;
+  search: string
   status: Status | "ALL"
-  priority?: Priority
-  sort?: "ASC" | "DESC"
-  all?: boolean
+  priority: Priority
+  sort: "ASC" | "DESC"
+  all: boolean
 }
 
 export type FetchTasksResponse = {

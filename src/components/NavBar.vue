@@ -4,7 +4,6 @@ import { MenuRight } from '@boxicons/vue';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
-
 const taskStore = useTaskStore()
 const { searchInput } = storeToRefs(taskStore);
 const open = ref(false);
@@ -29,22 +28,22 @@ const open = ref(false);
   <button class="btn btn-ghost btn-circle">
     <MenuRight
     @click="open = !open"
-      class="md:hidden" width={42} height={42} />
+      class="md:hidden" width="42" height="42" />
   </button>
   <!-- Desktop Menu-->
   <div>
     <ul class="hidden md:menu md:flex md:menu-horizontal px-1 gap-2">
       <li>
-        <Link to="/login">Login</Link>
+        <RouterLink to="/login">Login</RouterLink>
       </li>
       <li>
-        <Link to="/register">Register</Link>
+        <RouterLink to="/register">Register</RouterLink>
       </li>
       <li>
-        <Link to="/">Home</Link>
+        <RouterLink to="/">Home</RouterLink>
       </li>
       <li>
-        <Link to="/add">Add Todo</Link>
+        <RouterLink to="/add">Add Todo</RouterLink>
       </li>
       <li>
         <button
@@ -61,21 +60,24 @@ const open = ref(false);
     v-if="open"
     class="absolute top-16 right-4 bg-base-200 rounded-box shadow-lg p-3 md:hidden menu menu-vertical">
       <li>
-        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/login" @click="open = false">Login</RouterLink>
       </li>
       <li>
-        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/register" @click="open = false">Register</RouterLink>
       </li>
       <li>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/" @click="open = false">Home</RouterLink>
       </li>
       <li>
-        <RouterLink to="/add">Add Todo</RouterLink>
+        <RouterLink to="/add" @click="open = false">Add Todo</RouterLink>
       </li>
       <li>
         <button
           class="btn hover:bg-gray-600"
-          
+          @click="() => {
+            
+          }
+          "
         >
           Logout
         </button>

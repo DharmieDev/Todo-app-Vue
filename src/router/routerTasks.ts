@@ -1,32 +1,11 @@
-import App from '@/App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { defineAsyncComponent } from 'vue';
-import ErrorPage from '@/components/ErrorPage.vue';
 
-const TodoPage = defineAsyncComponent({
-  loader: () => import('../views/TodoPageView.vue'),
-  errorComponent: ErrorPage
-})
-const Login = defineAsyncComponent({
-  loader: () => import('../views/LoginView.vue'),
-  errorComponent: ErrorPage
-})
-const NotFound = defineAsyncComponent({
-  loader: () => import('../views/NotFound.vue'),
-  errorComponent: ErrorPage
-})
-const Register = defineAsyncComponent({
-  loader: () => import('../views/RegisterView.vue'),
-  errorComponent: ErrorPage
-})
-const AddTodo = defineAsyncComponent({
-  loader: () => import('../views/AddTodoView.vue'),
-  errorComponent: ErrorPage
-})
-const TodoDetails = defineAsyncComponent({
-  loader: () => import('../views/TodoDetails.vue'),
-  errorComponent: ErrorPage
-})
+const TodoPage = () => import('../views/TodoPageView.vue')
+const Login = () => import('../views/LoginView.vue')
+const NotFound = () => import('../views/NotFound.vue')
+const Register = () => import('../views/RegisterView.vue')
+const AddTodo = () => import('../views/AddTodoView.vue')
+const TodoDetails = () => import('../views/TodoDetails.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

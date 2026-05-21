@@ -4,7 +4,7 @@ import { useTaskStore } from '@/stores/taskStore';
 import { storeToRefs } from 'pinia';
 import { watch } from 'vue';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
 
 const taskStore = useTaskStore()
 const {
@@ -36,7 +36,10 @@ watch(() => [
 
 <template>
 <div class="grid grid-cols-1 md:grid-cols-2 m-2 p-4 gap-6">
+
+  <!-- Left Side -->
   <div :class="isDetailPage || isAddPage ? 'hidden md:block' : 'block'" class="flex flex-col gap-6 min-w-0">
+  <RouterView name="left"/>
     
     <!-- {/* Filter*/} -->
     <select
@@ -96,8 +99,10 @@ watch(() => [
       </button>
     </div>
   </div>
+
+  <!-- Right Side -->
   <div :class="isDetailPage || isAddPage ? 'block' : 'hidden md:block'">
-    <RouterView />
+    <RouterView name="right"/>
     <!-- {/* Add Todo Form */} -->
   </div>
 </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import LoadingSpinner from './components/LoadingSpinner.vue';
 import NavBar from './components/NavBar.vue';
+import TodoPageView from './views/TodoPageView.vue';
 
 </script>
 
@@ -10,7 +11,7 @@ import NavBar from './components/NavBar.vue';
    <template #default>
      <div>
        <NavBar />
-       <RouterView />
+       <TodoPageView />
      </div>
    </template>
 

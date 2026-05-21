@@ -11,11 +11,6 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'tasks',
-      component: TodoPage
-    },
-    {
       path: '/login',
       name: 'login',
       component: Login
@@ -28,12 +23,16 @@ const router = createRouter({
     {
       path: '/add',
       name: 'add-todo',
-      component: AddTodo
+      components: {
+        right: AddTodo
+      }
     },
     {
       path: '/task/:id',
       name: 'todo-details',
-      component: TodoDetails
+      components: {
+        right: TodoDetails,
+      }
     },
     {
       path: '/:pathMatch(.*)*',

@@ -1,4 +1,4 @@
-import { addTask, deleteTask, fetchTasks, updateTask, type CreateTaskParams, type FetchTasksParams, type UpdateTaskParams } from "@/api/tasksApi";
+import { addTask, deleteTask, fetchTasks, getTask, updateTask, type CreateTaskParams, type FetchTasksParams, type UpdateTaskParams } from "@/api/tasksApi";
 import type { Task } from "@/types/TaskTypes";
 import { defineStore } from "pinia";
 import { reactive } from "vue";
@@ -6,6 +6,7 @@ import { ref } from "vue";
 
 export const useTaskStore = defineStore("task", () => {
   const tasks = ref<Task[]>([])
+  const task = ref<Task | null>(null)
   const total = ref(0)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -120,8 +121,25 @@ export const useTaskStore = defineStore("task", () => {
     }
   }
 
+  const getTaskAction = async (id: string) => {
+    loading.value = true
+    error.value = null
+  
+    try {
+      const response = await getTask(id)
+      task.value = response
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = err.message
+    }
+      } finally {
+        loading.value =false
+      }
+  }
+
   return {
     tasks,
+    task,
     total,
     loading,
     error,
@@ -132,6 +150,7 @@ export const useTaskStore = defineStore("task", () => {
     createTaskAction,
     deleteTaskAction,
     updateTaskAction,
+    getTaskAction,
   }
 })
 

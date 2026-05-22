@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import router from '@/router/routerTasks';
+import { useAuthStore } from '@/stores/authStore';
 import { useTaskStore } from '@/stores/taskStore';
 import { MenuRight } from '@boxicons/vue';
 import { storeToRefs } from 'pinia';
@@ -7,6 +9,7 @@ import { ref } from 'vue';
 const taskStore = useTaskStore()
 const { searchInput } = storeToRefs(taskStore);
 const open = ref(false);
+const {logout} = useAuthStore()
 
 </script>
 
@@ -48,7 +51,12 @@ const open = ref(false);
       <li>
         <button
           class="btn hover:bg-gray-600"
-        
+          @click="
+          () => {
+            logout();
+            router.push('/login')
+          }
+          "
         >
           Logout
         </button>
@@ -75,7 +83,8 @@ const open = ref(false);
         <button
           class="btn hover:bg-gray-600"
           @click="() => {
-            
+            logout();
+            router.push('/login')
           }
           "
         >

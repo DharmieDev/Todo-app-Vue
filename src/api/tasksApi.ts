@@ -6,7 +6,7 @@ export type FetchTasksParams = {
   limit: number;
   search: string
   status: Status | "ALL"
-  priority: Priority
+  priority?: Priority
   sort: "ASC" | "DESC"
   all: boolean
 }
@@ -74,9 +74,7 @@ export type CreateTaskParams = {
   description: string;
   priority: Priority;
   status: Status;
-  completedAt?: string | null;
-  createdAt: string | null;
-  updatedAt: string | null;
+  
 }
 
 export const addTask = async (

@@ -3,22 +3,22 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { useTaskStore } from '@/stores/taskStore';
 import {type Priority, type Status} from '@/types/TaskTypes';
 import { ChevronLeft } from '@boxicons/vue';
-import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 
 const router = useRouter()
 const route = useRoute()
-const id = route.params.id as string
 
 const taskStore = useTaskStore()
 const error = ref<string | null>(null)
-const loading = ref(false)
+const { loading } = storeToRefs(taskStore)
 
-onMounted(async () => {
-  if (!id) return
+watch(() => route.params.id, async (id) => {
+  if (typeof id !== "string") return
   await taskStore.getTaskAction(id)
-})
+}, {immediate: true})
 
 
 const handlePriorityChange = async (
@@ -70,7 +70,7 @@ const handleDelete = async () => {
 </div>
 
 <!-- Error -->
-<div v-if="
+<div v-else-if="
 taskStore.error || !taskStore.task">
   <span class="text-red-600">Error fetching data</span>
 </div>

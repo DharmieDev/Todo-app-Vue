@@ -10,28 +10,28 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const form = reactive<LoginResponse>({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 })
 
 const error = reactive({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 })
 
 const validate = () => {
-  error.email = ''
-  error.password = ''
+  error.email = ""
+  error.password = ""
   
   let isValid = true
   
   if (!form.email) {
-    error.email = 'Email is required'
+    error.email = "Email is required"
     isValid = false
   }
 
   if (!form.password) {
-    error.password = 'Password is required'
+    error.password = "Password is required"
     isValid = false
   }
 
@@ -39,7 +39,7 @@ const validate = () => {
 }
 
 const handleSubmit = async () => {
-  const isValid = validate
+  const isValid = validate();
   if (!isValid) return;
 
   try {
@@ -52,7 +52,7 @@ const handleSubmit = async () => {
       if (response?.error) {
         Object.entries(
           response.error as Record<string, string[]>).forEach(([field, messages]) => {
-            error[field as keyof typeof error] = messages?.[0] ?? ''
+            error[field as keyof typeof error] = messages?.[0] ?? ""
           })
       } else if (response?.message) {
         alert(response.message)

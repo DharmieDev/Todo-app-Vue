@@ -1,6 +1,9 @@
 import { addTask, deleteTask, fetchTasks, getTask, updateTask, type CreateTaskParams, type FetchTasksParams, type UpdateTaskParams } from "@/api/tasksApi";
+import { type Priority, type Status } from "@/types/TaskTypes";
+
 import type { Task } from "@/types/TaskTypes";
 import { defineStore } from "pinia";
+import { v4 as uuidv4 } from "uuid";
 import { reactive } from "vue";
 import { ref } from "vue";
 
@@ -16,8 +19,7 @@ export const useTaskStore = defineStore("task", () => {
     limit: 10,
     search: "",
     status: "ALL",
-    priority: "LOW",
-    sort: "ASC",
+    sort: "DESC",
     all: false
   })
   
@@ -55,7 +57,7 @@ export const useTaskStore = defineStore("task", () => {
   payload: CreateTaskParams
   ) => {
     const tempTask: Task = {
-      id: new Date().toString(),
+      id: uuidv4(),
       name: payload.name,
       description: payload.description,
       priority: payload.priority,
@@ -75,7 +77,8 @@ export const useTaskStore = defineStore("task", () => {
         t => t.id === tempTask.id)
       if (index !== -1) {
           tasks.value[index] = saved
-        }
+      }
+      return saved
     } catch {
       tasks.value = tasks.value.filter(
         t => t.id !== tempTask.id
@@ -106,18 +109,36 @@ export const useTaskStore = defineStore("task", () => {
     id,
     updates
   }: UpdateTaskParams) => {
-    const task = tasks.value.find(
+    const listTask = tasks.value.find(
       t => t.id === id
     )
-    if (!task) return
-    const backup = { ...task }
-    Object.assign(task, updates)
+
+    const detailTask = task.value?.id === id ? task.value : null
+
+    const listBackup = listTask ? { ...listTask } : null
+
+    const detainBackup = detailTask ? { ...detailTask } : null
+
+    if (listTask) {
+      Object.assign(listTask, updates)
+    }
+
+    if (detailTask) {
+      Object.assign(detailTask, updates)
+    }
 
     try {
       await updateTask({id, updates})
     } catch (err) {
       if (err instanceof Error) error.value = err.message
-      Object.assign(task, backup)
+
+      if (listTask && listBackup) {
+        Object.assign(listTask, listBackup)
+      }
+
+      if (detailTask && detainBackup) {
+        Object.assign(detailTask, detainBackup)
+      }
     }
   }
 

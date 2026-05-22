@@ -67,7 +67,7 @@ watch(() => [
     <ul v-else
       class="flex flex-col gap-5">
         <li v-for="task in tasks" :key="task.id">
-          <RouterLink :to="`/task/${task.id}`">
+          <RouterLink :to="`/tasks/${task.id}`">
             <h2>{{ task.id }}</h2>
             <div class="flex flex-col">
               <h2 class="text-[20px] font-bold wrap-break-word">Name: {{ task.name }}</h2>
@@ -102,7 +102,7 @@ watch(() => [
 
   <!-- Right Side -->
   <div :class="isDetailPage || isAddPage ? 'block' : 'hidden md:block'">
-    <RouterView name="right"/>
+    <RouterView name="right" />
     <!-- {/* Add Todo Form */} -->
   </div>
 </div>
